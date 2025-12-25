@@ -25,7 +25,7 @@ export async function POST(request: Request) {
 
     const completion = await openai.chat.completions.create({
       messages,
-      model: "gpt-5-mini",
+      model: "gpt-4o-mini",
       temperature: 0.8,
       max_tokens: 300,
     });
@@ -33,8 +33,9 @@ export async function POST(request: Request) {
     const response = completion.choices[0]?.message?.content || "";
 
     return Response.json({ response });
-  } catch (error) {
-    console.error("OpenAI API error:", error);
+  } catch (error: unknown) {
+    const err = error as Error & { message?: string };
+    console.error("OpenAI API error:", err.message || error);
     return Response.json(
       { error: "Failed to get response from the oracle" },
       { status: 500 }

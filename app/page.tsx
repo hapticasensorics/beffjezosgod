@@ -153,7 +153,7 @@ export default function Home() {
                   ? "PROCESSING..."
                   : "AWAITING INPUT"}
           </span>
-          <span>GPT-5-MINI + TTS</span>
+          <span>GPT-4o-MINI + TTS</span>
         </div>
       </Terminal>
     </main>
