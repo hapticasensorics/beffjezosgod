@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --terminal-green: #00ff41;
+  --terminal-amber: #ffb000;
+  --terminal-dark: #0a0a0a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--terminal-dark);
+  color: var(--terminal-green);
+  font-family: "IBM Plex Mono", monospace;
+  overflow: hidden;
+}
+
+/* CRT Scanlines Overlay */
+.crt-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.3) 2px,
+    rgba(0, 0, 0, 0.3) 4px
+  );
+  z-index: 10;
+}
+
+/* Moving scanline effect */
+.crt-scanline-moving {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 255, 65, 0.03) 50%,
+    transparent 100%
+  );
+  height: 100px;
+  animation: scanline 8s linear infinite;
+  z-index: 11;
+}
+
+/* CRT Flicker */
+.crt-flicker {
+  animation: flicker 0.15s infinite;
+}
+
+/* Screen curvature effect */
+.crt-curve {
+  border-radius: 20px;
+  box-shadow:
+    inset 0 0 100px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Vignette */
+.crt-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  z-index: 12;
+}
+
+/* Terminal text glow */
+.terminal-text {
+  color: var(--terminal-green);
+  text-shadow:
+    0 0 5px var(--terminal-green),
+    0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+/* Glow effect for speaking state */
+.glow-speaking {
+  animation: speakingGlow 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes speakingGlow {
+  0% {
+    filter: drop-shadow(0 0 20px rgba(0, 255, 65, 0.4))
+      drop-shadow(0 0 40px rgba(0, 255, 65, 0.2));
+  }
+  100% {
+    filter: drop-shadow(0 0 40px rgba(0, 255, 65, 0.8))
+      drop-shadow(0 0 80px rgba(0, 255, 65, 0.4));
+  }
+}
+
+/* Silhouette styling */
+.silhouette {
+  filter: brightness(0) drop-shadow(0 0 20px var(--terminal-green))
+    drop-shadow(0 0 40px rgba(0, 255, 65, 0.3));
+}
+
+/* Typewriter cursor */
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Button glow on hover */
+.btn-glow {
+  transition: all 0.2s ease;
+}
+
+.btn-glow:hover {
+  box-shadow:
+    0 0 20px var(--terminal-green),
+    0 0 40px rgba(0, 255, 65, 0.3);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 255, 65, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--terminal-green);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 65, 0.8);
+}
