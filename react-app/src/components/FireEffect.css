@@ -1,0 +1,31 @@
+.fire-effect {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 150px;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.8;
+  transition: opacity 0.5s ease;
+}
+
+.fire-left {
+  left: 0;
+  mask-image: linear-gradient(to right, black 50%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 50%, transparent 100%);
+}
+
+.fire-right {
+  right: 0;
+  mask-image: linear-gradient(to left, black 50%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to left, black 50%, transparent 100%);
+}
+
+.intensity-high {
+  opacity: 1;
+  filter: brightness(1.2);
+}
+
+.intensity-low {
+  opacity: 0.6;
+}

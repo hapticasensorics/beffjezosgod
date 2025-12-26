@@ -1,0 +1,185 @@
+/* Round Display - 720x720 circular viewport */
+
+:root {
+  --gold: #ffd700;
+  --orange: #ff6b35;
+  --red: #ff4444;
+  --blue: #00d4ff;
+  --purple: #8b5cf6;
+}
+
+.app {
+  width: 720px;
+  height: 720px;
+  position: relative;
+  overflow: hidden;
+  background: #000;
+  cursor: pointer;
+
+  /* Circular mask for round display */
+  border-radius: 50%;
+
+  /* Center on screen for development */
+  margin: 0 auto;
+}
+
+/* Fullscreen video avatar */
+.fullscreen-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* Darkening overlay when dormant */
+.dormant-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%);
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.dormant-overlay.visible {
+  opacity: 1;
+}
+
+/* Status overlay at bottom */
+.status-overlay {
+  position: absolute;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+  z-index: 30;
+  transition: all 0.3s ease;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #666;
+  transition: all 0.3s ease;
+}
+
+.status-text {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: #888;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+/* Dormant state */
+.app:not(.active) .status-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.app:not(.active) .status-dot {
+  background: var(--gold);
+  box-shadow: 0 0 10px var(--gold);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.app:not(.active) .status-text {
+  color: var(--gold);
+}
+
+/* Listening state */
+.app.listening .status-dot {
+  background: var(--blue);
+  box-shadow: 0 0 15px var(--blue);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.app.listening .status-text {
+  color: var(--blue);
+}
+
+.app.listening .status-overlay {
+  border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+/* Speaking state */
+.app.speaking .status-dot {
+  background: var(--orange);
+  box-shadow: 0 0 15px var(--orange);
+  animation: pulse 0.5s ease-in-out infinite;
+}
+
+.app.speaking .status-text {
+  color: var(--orange);
+}
+
+.app.speaking .status-overlay {
+  border: 1px solid rgba(255, 107, 53, 0.3);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+/* Connecting overlay */
+.connecting-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(255, 215, 0, 0.2);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Hover effect for desktop testing */
+@media (hover: hover) {
+  .app:not(.active):hover .dormant-overlay {
+    opacity: 0.8;
+  }
+
+  .app:not(.active):hover .status-overlay {
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+/* For actual kiosk mode - fill the viewport */
+@media screen and (max-width: 720px) {
+  .app {
+    width: 100vw;
+    height: 100vw;
+    margin: 0;
+  }
+}

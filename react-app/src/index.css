@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --gold: #ffd700;
+  --orange: #ff6b35;
+  --red: #ff4444;
+  --blue: #00d4ff;
+  --purple: #8b5cf6;
+  --dark: #0a0a0f;
+  --darker: #050508;
+}
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background: #000;
+  color: #e0e0e0;
+  min-height: 100vh;
+  overflow: hidden;
+  /* Center the round display */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
