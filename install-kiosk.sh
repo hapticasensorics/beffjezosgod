@@ -181,6 +181,7 @@ log_step "Auto-login enabled"
 
 # Step 12: Disable splash screen (saves ~2-3 seconds on boot)
 log_info "Disabling splash screen..."
+sudo sed -i 's/ quiet splash//' /boot/firmware/cmdline.txt 2>/dev/null || true
 sudo raspi-config nonint do_boot_splash 1 2>/dev/null || true
 log_step "Splash screen disabled"
 
