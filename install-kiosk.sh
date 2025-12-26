@@ -179,7 +179,12 @@ log_info "Enabling desktop auto-login..."
 sudo raspi-config nonint do_boot_behaviour B4 2>/dev/null || true
 log_step "Auto-login enabled"
 
-# Step 12: Disable screen blanking permanently
+# Step 12: Disable splash screen (saves ~2-3 seconds on boot)
+log_info "Disabling splash screen..."
+sudo raspi-config nonint do_boot_splash 1 2>/dev/null || true
+log_step "Splash screen disabled"
+
+# Step 13: Disable screen blanking permanently
 log_info "Disabling screen blanking..."
 mkdir -p "$HOME/.config/lxsession/LXDE-pi"
 cat > "$HOME/.config/lxsession/LXDE-pi/autostart" << 'EOF'
