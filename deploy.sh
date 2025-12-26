@@ -13,6 +13,9 @@ cd "$INSTALL_DIR"
 git fetch origin
 git reset --hard origin/$BRANCH
 
+# Ensure scripts are executable
+chmod +x "$INSTALL_DIR/kiosk.sh" "$INSTALL_DIR/deploy.sh" 2>/dev/null || true
+
 echo "Installing dependencies..."
 cd "$INSTALL_DIR/react-app"
 npm install
