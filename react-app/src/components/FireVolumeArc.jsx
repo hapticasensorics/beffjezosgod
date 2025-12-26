@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import './FireVolumeArc.css'
 
-function FireVolumeArc({ volume = 0, frequencies = [], isSpeaking, isListening, isActive }) {
+function FireVolumeArc({ volume = 0, isSpeaking, isListening, isActive }) {
   const canvasRef = useRef(null)
   const particlesRef = useRef([])
   const volumeRef = useRef(volume || 0)
@@ -27,7 +27,7 @@ function FireVolumeArc({ volume = 0, frequencies = [], isSpeaking, isListening, 
 
     const canvas = canvasRef.current
     const ctx = canvas.getContext('2d')
-    const particleCount = 110
+    const particleCount = 120
 
     class Particle {
       constructor(x, spread) {
@@ -39,11 +39,11 @@ function FireVolumeArc({ volume = 0, frequencies = [], isSpeaking, isListening, 
       reset() {
         this.x = this.baseX + (Math.random() - 0.5) * this.spread * 2
         this.y = canvas.height
-        this.size = Math.random() * 12 + 4
-        this.speedY = Math.random() * 2 + 1
+        this.size = Math.random() * 14 + 6
+        this.speedY = Math.random() * 2.4 + 1.2
         this.speedX = (Math.random() - 0.5) * 1
         this.life = 1
-        this.decay = Math.random() * 0.02 + 0.015
+        this.decay = Math.random() * 0.018 + 0.012
         // Fire colors based on state
         if (speakingRef.current) {
           this.hue = Math.random() * 30 + 10 // Red to orange
@@ -54,9 +54,9 @@ function FireVolumeArc({ volume = 0, frequencies = [], isSpeaking, isListening, 
 
       update(volumeMultiplier) {
         // Volume affects how high particles go
-        const maxHeight = 40 + volumeMultiplier * 170
+        const maxHeight = 60 + volumeMultiplier * 240
 
-        this.y -= this.speedY * (0.5 + volumeMultiplier)
+        this.y -= this.speedY * (0.6 + volumeMultiplier * 0.9)
         this.x += this.speedX + Math.sin(this.y * 0.05) * 0.5
         this.life -= this.decay
         this.size *= 0.98
@@ -88,10 +88,10 @@ function FireVolumeArc({ volume = 0, frequencies = [], isSpeaking, isListening, 
     const seedParticles = () => {
       particlesRef.current = []
       const width = canvas.width || 720
-      const radius = width * 0.45
-      const spread = Math.max(18, width * 0.035)
-      const arcStart = Math.PI * 1.12 // ~202deg
-      const arcEnd = Math.PI * 1.88  // ~338deg
+      const radius = width * 0.46
+      const spread = Math.max(20, width * 0.04)
+      const arcStart = Math.PI * 1.1 // ~198deg
+      const arcEnd = Math.PI * 1.9  // ~342deg
       const arcSpan = arcEnd - arcStart
 
       for (let i = 0; i < particleCount; i++) {
@@ -112,18 +112,35 @@ function FireVolumeArc({ volume = 0, frequencies = [], isSpeaking, isListening, 
       seedParticles()
     }
 
+    const drawBaseGlow = (intensity) => {
+      const width = canvas.width
+      const height = canvas.height
+      const glowHeight = Math.max(26, height * 0.32)
+      const hue = speakingRef.current ? 28 : 195
+      const gradient = ctx.createLinearGradient(0, height, 0, height - glowHeight)
+      gradient.addColorStop(0, `hsla(${hue}, 100%, 60%, ${0.35 * intensity})`)
+      gradient.addColorStop(0.55, `hsla(${hue + 10}, 100%, 50%, ${0.2 * intensity})`)
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
+      ctx.fillStyle = gradient
+      ctx.fillRect(0, height - glowHeight, width, glowHeight)
+    }
+
     // Animation loop
     let animationId
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       // Get current volume and smooth it for steadier visuals
-      const currentVolume = Math.max(0, Math.min(1, volumeRef.current || 0))
-      const smoothed = smoothedVolumeRef.current * 0.82 + currentVolume * 0.18
+      const rawVolume = Math.max(0, Math.min(1, volumeRef.current || 0))
+      const easedVolume = Math.pow(rawVolume, 0.6)
+      const floor = speakingRef.current ? 0.12 : listeningRef.current ? 0.09 : 0.07
+      const targetVolume = Math.min(1, Math.max(floor, easedVolume))
+      const smoothed = smoothedVolumeRef.current * 0.78 + targetVolume * 0.22
       smoothedVolumeRef.current = smoothed
-      const intensity = 0.35 + smoothed * 0.65
+      const intensity = 0.45 + smoothed * 0.55
 
       ctx.globalCompositeOperation = 'lighter'
+      drawBaseGlow(intensity)
 
       particlesRef.current.forEach(p => {
         // Update hue based on current state
