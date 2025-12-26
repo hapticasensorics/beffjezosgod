@@ -125,8 +125,8 @@ xset s noblank
 # Hide cursor after 0.5 seconds of inactivity
 unclutter -idle 0.5 -root &
 
-# Launch Chromium in kiosk mode
-chromium --noerrdialogs --disable-infobars --kiosk --incognito http://localhost:3000
+# Launch Chromium in kiosk mode (--password-store=basic disables keyring prompt)
+chromium --noerrdialogs --disable-infobars --kiosk --incognito --password-store=basic --disable-features=TranslateUI http://localhost:3000
 EOF
 chmod +x "$INSTALL_DIR/kiosk.sh"
 log_step "Kiosk script created"
